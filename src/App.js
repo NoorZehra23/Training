@@ -1,25 +1,61 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+const TodoItem = ({ text }) =>
+ <li>
+    {/* <span>{id} -</span> */}
+    <span>{text}</span>
+
+ </li>;
+
+const TodoList = () => {
+  const [todos, setTodos] = useState([]);
+  const [newTodoText, setNewTodoText] = useState('');
+  const [nextId, setNextId] = useState(1);
+
+
+  const handleChange = (event) => {
+    setNewTodoText(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const newTodo = {
+      id: nextId,
+      text: newTodoText
+    };
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    setNewTodoText('');
+    setNextId(nextId + 1);
+
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Todo List</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={newTodoText}
+          onChange={handleChange}
+          placeholder="Add new todo"
+        />
+        <button>Add</button>
+      </form>
+      <ul>
+        {todos.map((todo) => (
+          <TodoItem key={todo.id}   text={todo.text} />
+        ))}
+      </ul>
     </div>
   );
-}
+};
+
+const App = () => {
+  return (
+    <div>
+      <TodoList />
+    </div>
+  );
+};
 
 export default App;
