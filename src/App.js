@@ -1,59 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import MyForm from './Components/MyForm';
+import { Table } from './Components/Table'; 
 
-const TodoItem = ({ text }) =>
- <li>
-    {/* <span>{id} -</span> */}
-    <span>{text}</span>
-
- </li>;
-
-const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-  const [newTodoText, setNewTodoText] = useState('');
-  const [nextId, setNextId] = useState(1);
-
-
-  const handleChange = (event) => {
-    setNewTodoText(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newTodo = {
-      id: nextId,
-      text: newTodoText
-    };
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
-    setNewTodoText('');
-    setNextId(nextId + 1);
-
-  };
-
-  return (
-    <div>
-      <h1>Todo List</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={newTodoText}
-          onChange={handleChange}
-          placeholder="Add new todo"
-        />
-        <button>Add</button>
-      </form>
-      <ul>
-        {todos.map((todo) => (
-          <TodoItem key={todo.id}   text={todo.text} />
-        ))}
-      </ul>
-    </div>
-  );
-};
 
 const App = () => {
+  const [rows, setRows] = useState([
+    {
+      name: "Ali",
+      age: 20,
+      email: "ali@gmail.com",
+      gender: "Male",
+      employment: "Unemployed"
+    },
+    {
+      name: "Sara",
+      age: 25,
+      email: "sara@example.com",
+      gender: "Female",
+      employment: "Employed"
+    },
+    {
+      name: "John",
+      age: 30,
+      email: "john@example.com",
+      gender: "Male",
+      employment: "Employed"
+    },
+    {
+      name: "Emily",
+      age: 22,
+      email: "emily@example.com",
+      gender: "Female",
+      employment: "Unemployed"
+    },
+  ]);
+  
+  const handleDeleteRow = (targetIndex) => {
+    setRows(rows.filter((_, index) => index !== targetIndex));
+  };
+
+
+  useEffect(() => {
+  }, [rows]);
+
+  const handleSubmit = (newRow) => {
+    setRows([...rows, newRow]);
+
+  };  
+
   return (
     <div>
-      <TodoList />
+  <Table rows={rows} deleteRow={handleDeleteRow}/>
+  <MyForm onSubmit={handleSubmit}/>
     </div>
   );
 };
