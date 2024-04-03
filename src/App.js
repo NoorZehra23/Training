@@ -1,59 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import MyForm from './Components/MyForm';
-import { Table } from './Components/Table'; 
+import Table from './Components/Table'; 
 
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      rows: [
+        {
+          name: "Ali",
+          age: 20,
+          email: "ali@gmail.com",
+          gender: "Male",
+          employment: "Unemployed"
+        },
+        {
+          name: "Sara",
+          age: 25,
+          email: "sara@example.com",
+          gender: "Female",
+          employment: "Employed"
+        },
+        {
+          name: "John",
+          age: 30,
+          email: "john@example.com",
+          gender: "Male",
+          employment: "Employed"
+        },
+        {
+          name: "Emily",
+          age: 22,
+          email: "emily@example.com",
+          gender: "Female",
+          employment: "Unemployed"
+        },
+      ]
+    };
+  }
 
-const App = () => {
-  const [rows, setRows] = useState([
-    {
-      name: "Ali",
-      age: 20,
-      email: "ali@gmail.com",
-      gender: "Male",
-      employment: "Unemployed"
-    },
-    {
-      name: "Sara",
-      age: 25,
-      email: "sara@example.com",
-      gender: "Female",
-      employment: "Employed"
-    },
-    {
-      name: "John",
-      age: 30,
-      email: "john@example.com",
-      gender: "Male",
-      employment: "Employed"
-    },
-    {
-      name: "Emily",
-      age: 22,
-      email: "emily@example.com",
-      gender: "Female",
-      employment: "Unemployed"
-    },
-  ]);
-  
-  const handleDeleteRow = (targetIndex) => {
-    setRows(rows.filter((_, index) => index !== targetIndex));
+  handleDeleteRow = (targetIndex) => {
+    this.setState({
+      rows: this.state.rows.filter((_, index) => index !== targetIndex)
+    });
   };
 
+  handleSubmit = (newRow) => {
+    this.setState({
+      rows: [...this.state.rows, newRow]
+    });
+  };
 
-  useEffect(() => {
-  }, [rows]);
+  render() {
+    const { rows } = this.state;
 
-  const handleSubmit = (newRow) => {
-    setRows([...rows, newRow]);
-
-  };  
-
-  return (
-    <div>
-  <Table rows={rows} deleteRow={handleDeleteRow}/>
-  <MyForm onSubmit={handleSubmit}/>
-    </div>
-  );
-};
+    return (
+      <div>
+        <Table rows={rows} deleteRow={this.handleDeleteRow}/>
+        <MyForm onSubmit={this.handleSubmit}/>
+      </div>
+    );
+  }
+}
 
 export default App;
