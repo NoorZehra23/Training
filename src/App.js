@@ -1,61 +1,66 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
+import MyForm from './Components/MyForm';
+import Table from './Components/Table'; 
 
-const TodoItem = ({ text }) =>
- <li>
-    {/* <span>{id} -</span> */}
-    <span>{text}</span>
-
- </li>;
-
-const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-  const [newTodoText, setNewTodoText] = useState('');
-  const [nextId, setNextId] = useState(1);
-
-
-  const handleChange = (event) => {
-    setNewTodoText(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newTodo = {
-      id: nextId,
-      text: newTodoText
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      rows: [
+        {
+          name: "Ali",
+          age: 20,
+          email: "ali@gmail.com",
+          gender: "Male",
+          employment: "Unemployed"
+        },
+        {
+          name: "Sara",
+          age: 25,
+          email: "sara@example.com",
+          gender: "Female",
+          employment: "Employed"
+        },
+        {
+          name: "John",
+          age: 30,
+          email: "john@example.com",
+          gender: "Male",
+          employment: "Employed"
+        },
+        {
+          name: "Emily",
+          age: 22,
+          email: "emily@example.com",
+          gender: "Female",
+          employment: "Unemployed"
+        },
+      ]
     };
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
-    setNewTodoText('');
-    setNextId(nextId + 1);
+  }
 
+  handleDeleteRow = (targetIndex) => {
+    this.setState({
+      rows: this.state.rows.filter((_, index) => index !== targetIndex)
+    });
   };
 
-  return (
-    <div>
-      <h1>Todo List</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={newTodoText}
-          onChange={handleChange}
-          placeholder="Add new todo"
-        />
-        <button>Add</button>
-      </form>
-      <ul>
-        {todos.map((todo) => (
-          <TodoItem key={todo.id}   text={todo.text} />
-        ))}
-      </ul>
-    </div>
-  );
-};
+  handleSubmit = (newRow) => {
+    this.setState({
+      rows: [...this.state.rows, newRow]
+    });
+  };
 
-const App = () => {
-  return (
-    <div>
-      <TodoList />
-    </div>
-  );
-};
+  render() {
+    const { rows } = this.state;
+
+    return (
+      <div>
+        <Table rows={rows} deleteRow={this.handleDeleteRow}/>
+        <MyForm onSubmit={this.handleSubmit}/>
+      </div>
+    );
+  }
+}
 
 export default App;
