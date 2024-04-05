@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState } from 'react';
 
 const TodoItem = ({ text }) =>
@@ -56,6 +57,37 @@ const App = () => {
       <TodoList />
     </div>
   );
+=======
+import React from 'react';
+import Search from './Components/Search';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
+  Routes
+} from 'react-router-dom';
+import Layout from './Layout';
+import DisneyCharacters, { CharacterLoader } from './Components/DisneyCharacters';
+import Details from './Components/Details.Jsx';
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+          <Route path='/' element={<Layout/>}>     
+          <Route 
+          loader={CharacterLoader}
+          path='' 
+          element={<DisneyCharacters/>}
+          
+           /> 
+        <Route path='/about' element={<Search />} />
+        
+      </Route>
+    )
+)
+const App = () => {
+  return <RouterProvider router={router} />;
+>>>>>>> Stashed changes
 };
 
 export default App;
