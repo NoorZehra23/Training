@@ -1,61 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Search from './Components/Search.jsx';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
+} from 'react-router-dom';
+import Layout from './Layout.jsx';
+import DisneyCharacters, { CharacterLoader } from './Components/DisneyCharacters.jsx';
+import Details from './Components/Details.jsx';
+import Register from './Forms/Register.jsx';
+import Favourites from './Components/Favourites.jsx';
 
-const TodoItem = ({ text }) =>
- <li>
-    {/* <span>{id} -</span> */}
-    <span>{text}</span>
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<Layout />}>
+      <Route
+        path=''
+        loader={CharacterLoader}
+        element={<DisneyCharacters />} />
+      <Route path='/search' element={<Search />} />
+      <Route path='/register' element={<Register/>} />
+      <Route path='/character/:characterId' element={<Details />} />
+      <Route path='/favourite' element={<Favourites/>} />
+    </Route>
+  )
+)
 
- </li>;
-
-const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-  const [newTodoText, setNewTodoText] = useState('');
-  const [nextId, setNextId] = useState(1);
-
-
-  const handleChange = (event) => {
-    setNewTodoText(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newTodo = {
-      id: nextId,
-      text: newTodoText
-    };
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
-    setNewTodoText('');
-    setNextId(nextId + 1);
-
-  };
-
-  return (
-    <div>
-      <h1>Todo List</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={newTodoText}
-          onChange={handleChange}
-          placeholder="Add new todo"
-        />
-        <button>Add</button>
-      </form>
-      <ul>
-        {todos.map((todo) => (
-          <TodoItem key={todo.id}   text={todo.text} />
-        ))}
-      </ul>
-    </div>
-  );
-};
 
 const App = () => {
-  return (
-    <div>
-      <TodoList />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
