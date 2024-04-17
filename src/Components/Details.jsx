@@ -1,9 +1,39 @@
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation,  useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { addToFavourites, removeFromFavourites } from '../Features/favouritesSlice';
 
 const Details = () => {
-  const location = useLocation();
-  const character = location.state;
+  const dispatch = useDispatch();
+  const navigate= useNavigate();  
+  const location=useLocation();
+    const character=location.state;
+    console.log(character)
+
+    const addToFavouriteHandler = (character) => {
+      dispatch(addToFavourites(character))
+      navigate('/favourite');
+  }
+
+
+  const removeFromFavouriteHandler = (character) => {
+    dispatch(removeFromFavourites(character))
+    navigate('/favourite');
+}
+
+//   const addToFavouriteHandler = (character) => {
+//     let item={
+//     name:character.name, 
+//     imageUrl:character.imageUrl,
+//     movies: character.movies,
+//     videoGames:character.videoGames,
+//     id:character._id,
+//     }
+//     dispatch(addToFavourites(item))
+//     navigate('/favourite');
+// }
 
   return (
     <div className="bg-gray-200 p-6 rounded-lg shadow-lg flex flex-col items-center">
@@ -47,6 +77,26 @@ const Details = () => {
           )}
         </ul>
       </div>
+      <div className="flex-1 justify-center items-center p-2">
+                        <button
+                            className="bg-blue-600 hover:bg-blue-900 border-blue-600 text-gray-100 px-3 py-2 rounded-lg shadow-lg text-sm flex gap-2 items-center"
+                            onClick={()=>addToFavouriteHandler(character)}
+                           >
+                            <div>
+                                <FontAwesomeIcon icon={faHeart} />
+                            </div>
+                            <span>Add to Favourites</span>
+                        </button>
+                    </div>
+                    <div className="flex-1 justify-center items-center p-2">
+                        <button
+                            className="bg-blue-600 hover:bg-blue-900 border-blue-600 text-gray-100 px-3 py-2 rounded-lg shadow-lg text-sm flex gap-2 items-center"
+                            onClick={()=>removeFromFavouriteHandler(character)}
+                           >
+                            <span>Remove From Favourites</span>
+                        </button>
+                    </div>
+
     </div>
 
 

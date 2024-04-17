@@ -9,8 +9,8 @@ import {
 import Layout from './Layout.jsx';
 import DisneyCharacters, { CharacterLoader } from './Components/DisneyCharacters.jsx';
 import Details from './Components/Details.jsx';
-import SignUp from './Forms/Register.jsx';
 import Register from './Forms/Register.jsx';
+import Favourites from './Components/Favourites.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +22,7 @@ const router = createBrowserRouter(
       <Route path='/search' element={<Search />} />
       <Route path='/register' element={<Register/>} />
       <Route path='/character/:characterId' element={<Details />} />
+      <Route path='/favourite' element={<Favourites/>} />
     </Route>
   )
 )
