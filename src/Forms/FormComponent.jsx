@@ -2,23 +2,61 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 
-const FormComponent = ({ fields,validationSchema, onSubmit }) => {
+const FormComponent = ({ fields, onSubmit ,onSubmitName }) => {
 
     const initialValues = fields.reduce((values, field) => {
         values[field.name] = ""; 
         return values;
     }, {});
 
-    // const validationSchema = Yup.object().shape(
-    //     fields.reduce((acc, field) => {
-    //         acc[field.name] = field.validation;
-    //         return acc;
-    //     }, {})
-    // );
+    const validatePassword = (value) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+        return regex.test(value);
+      };
 
+      
+      const generateValidationSchema = (fields) => {
+        const schemaObject = fields.reduce((acc, field) => {
+          switch (field.inputType) {
+            case "string":
+              acc[field.name] = Yup.string().required(`${field.label} is required.`);
+              break;
+            case "number":
+              acc[field.name] = Yup.number().required(`${field.label} is required.`);
+              break;
+            case "email":
+              acc[field.name] = Yup.string().email().required(`${field.label} is required.`);
+              break;
+            case "password":
+              acc[field.name] = Yup.string()
+                .min(6, `${field.label} must be at least 6 characters long.`)
+                .required(`${field.label} is required.`)
+                .test('password', 'Weak password. Please ensure your password has at least 6 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.', validatePassword)
+              break;
+           
+              default:
+              if (field.name === "confirm_password") {
+                acc[field.name] = Yup.string()
+                  .required("Please re-enter your password")
+                  .oneOf([Yup.ref("password"), null], "Password must match.") ;
+              } else {
+                acc[field.name] = Yup.string().required(`${field.label} is required.`);
+              }
+              break;
+          }
+          return acc;
+        }, {});
+        return Yup.object().shape(schemaObject);
+      };
+      
+      const validationSchema = generateValidationSchema(fields);
     return (
+        <>
+        <h1>
+            {onSubmitName}
+        </h1>
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -29,7 +67,7 @@ const FormComponent = ({ fields,validationSchema, onSubmit }) => {
                     {fields.map((field) => (
                         <div key={field.name}>
                             <label className="text-sm mr-1 font-bold text-black-700">
-                            {field.name.charAt(0).toUpperCase() + field.name.slice(1).replace(/_/g, " ")}:                            </label>
+                            {field.label}:                            </label>
                             {field.type === "select" ? (
                                 <Field as="select" name={field.name} className="my-select">
                                     <option value="">Select {field.name.charAt(0).toUpperCase() + field.name.slice(1)}</option>
@@ -59,7 +97,6 @@ const FormComponent = ({ fields,validationSchema, onSubmit }) => {
                                     name={field.name}
                                     type={field.inputType}
                                     component={field.type}
-                                    // validate={field.validFunc}
                                 />
                             )}
 
@@ -75,12 +112,13 @@ const FormComponent = ({ fields,validationSchema, onSubmit }) => {
                             <div>
                                 <FontAwesomeIcon icon={faSquarePlus} />
                             </div>
-                            <span>Add Record</span>
+                            <span>{onSubmitName}</span>
                         </button>
                     </div>
                 </Form>
             )}
         </Formik>
+        </>
     );
 };
 

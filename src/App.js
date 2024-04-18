@@ -11,16 +11,18 @@ import DisneyCharacters, { CharacterLoader } from './Components/DisneyCharacters
 import Details from './Components/Details.jsx';
 import Register from './Forms/Register.jsx';
 import Favourites from './Components/Favourites.jsx';
+import Login from './Forms/Login.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
+      <Route path='' element={<Register/>} />
       <Route
-        path=''
+        path='/home'
         loader={CharacterLoader}
         element={<DisneyCharacters />} />
       <Route path='/search' element={<Search />} />
-      <Route path='/register' element={<Register/>} />
+      <Route path='/login' element={<Login/>} />
       <Route path='/character/:characterId' element={<Details />} />
       <Route path='/favourite' element={<Favourites/>} />
     </Route>

@@ -88,14 +88,6 @@ const Details = () => {
                             <span>Add to Favourites</span>
                         </button>
                     </div>
-                    <div className="flex-1 justify-center items-center p-2">
-                        <button
-                            className="bg-blue-600 hover:bg-blue-900 border-blue-600 text-gray-100 px-3 py-2 rounded-lg shadow-lg text-sm flex gap-2 items-center"
-                            onClick={()=>removeFromFavouriteHandler(character)}
-                           >
-                            <span>Remove From Favourites</span>
-                        </button>
-                    </div>
 
     </div>
 

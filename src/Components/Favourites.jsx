@@ -2,12 +2,13 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import Card from './Card';
 
-const Favourites = () => {
 
+const Favourites = () => {
 
     const  {favouriteItems}  = useSelector((state) => state?.favourites);
     console.log(favouriteItems)
 
+    
 
     return (
         <>
@@ -17,7 +18,7 @@ const Favourites = () => {
                     <div className='py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-center justify-center'>
                         {
                             favouriteItems.map((item) => {
-                            return <Card key={item._id} character={item}/>  
+                            return <Card key={item._id} character={item} isFavourite={false}/>  
                             })
                         }
                     </div>
